@@ -27,7 +27,7 @@ public class VehiculoService implements VehiculoServiceImpl{
         Vehiculo vehi = this.existenciaVehiculo(vehiculo.getPlacas());
         if(vehi != null){
             //Si se encontró algún usuario entonces regresamos
-            throw new VehiculoDuplicateException("Vehiculo existente");
+            throw new VehiculoDuplicateException("Placas de vehiculo existente.");
         }
         vehi = veRe.save(veMa.paraVehiculo(vehiculo));
         return veMa.paraVehiculoSimpleDTO(vehi);
