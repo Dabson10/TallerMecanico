@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -29,4 +31,14 @@ public class CatalogoRefaccion {
     @NotNull(message = "Ingrese un precio.")
     @Positive(message = "El precio debe de ser positivo.")
     private Float precioActual;
+
+    @PrePersist
+    public void newRefaccion(){
+        log.info("Se intentara crear una nueva refacción con numero de: {}", numero);
+    }
+
+    @PostPersist
+    public void refaccionCreada(){
+        log.info("Se creo la refacción con numero de: {}", numero);
+    }
 }

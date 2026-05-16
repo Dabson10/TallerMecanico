@@ -1,4 +1,4 @@
-package org.github.dabson10.tallermecanico.dto.tecnico;
+package org.github.dabson10.tallermecanico.dto.tecnicoDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

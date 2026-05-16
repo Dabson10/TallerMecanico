@@ -40,6 +40,6 @@ public class ClienteService implements ClienteServiceImpl{
      */
     @Override
     public Cliente existenciaCliente(String correo) {
-        return cliRe.findByCorreo(correo);
+        return cliRe.findByCorreo(correo).orElse(null);
     }
 }

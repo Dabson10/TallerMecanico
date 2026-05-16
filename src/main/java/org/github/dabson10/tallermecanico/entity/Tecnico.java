@@ -8,9 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -29,4 +31,15 @@ public class Tecnico {
     private Boolean activo;
     @OneToMany(mappedBy = "tecnico")
     private List<OrdenServicio> ordenes;
+
+    @PrePersist
+    public void newTecnico(){
+        log.info("Se intentara crear un nuevo técnico llamado: {}", nombre);
+    }
+
+    @PostPersist
+    public void tecnicoCreado(){
+        log.info("Se creo el técnico llamado: {}", nombre);
+    }
+
 }

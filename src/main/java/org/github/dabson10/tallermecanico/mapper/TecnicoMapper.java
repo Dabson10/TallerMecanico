@@ -1,6 +1,6 @@
 package org.github.dabson10.tallermecanico.mapper;
 
-import org.github.dabson10.tallermecanico.dto.tecnico.TecnicoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.mapstruct.Mapper;
 

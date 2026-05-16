@@ -1,7 +1,7 @@
 package org.github.dabson10.tallermecanico.controller;
 
 import jakarta.validation.Valid;
-import org.github.dabson10.tallermecanico.dto.tecnico.TecnicoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.service.TecnicoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

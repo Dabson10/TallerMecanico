@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Entity
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
@@ -29,4 +31,14 @@ public class Vehiculo {
     @OneToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
+
+    @PrePersist
+    public void newVehiculo(){
+        log.info("Se intentara crear un nuevo vehiculo a nombre de {}", cliente.getNombre());
+    }
+
+    @PostPersist
+    public void vehiculoCreado(){
+        log.info("Se creo un nuevo vehiculo a nombre: {}", cliente.getNombre());
+    }
 }

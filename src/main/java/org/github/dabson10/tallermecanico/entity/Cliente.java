@@ -5,14 +5,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 public class Cliente {
     @Id
@@ -32,4 +33,20 @@ public class Cliente {
     private Vehiculo vehiculo;
     @OneToMany(mappedBy = "cliente")
     private List<OrdenServicio> ordenes;
+
+    public Cliente(){}
+
+
+
+    @PrePersist
+    public void logNewCliente(){
+        log.info("El cliente {}, se esta intentando guardar.", nombre);
+    }
+
+    @PostPersist
+    public void ClienteNew(){
+        log.info("Cliente {} se creo correctamente.", nombre);
+    }
+
+
 }

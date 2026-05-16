@@ -1,6 +1,6 @@
 package org.github.dabson10.tallermecanico.service;
 
-import org.github.dabson10.tallermecanico.dto.tecnico.TecnicoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.github.dabson10.tallermecanico.exceptions.CorreoDuplicateException;
 import org.github.dabson10.tallermecanico.mapper.TecnicoMapper;
@@ -28,6 +28,6 @@ public class TecnicoService implements TecnicoServiceImpl {
 
     @Override
     public Tecnico existenciaTecnico(String correo) {
-        return teRe.findByCorreo(correo);
+        return teRe.findByCorreo(correo).orElse(null);
     }
 }
