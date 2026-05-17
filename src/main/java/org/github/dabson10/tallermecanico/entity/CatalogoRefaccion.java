@@ -41,4 +41,11 @@ public class CatalogoRefaccion {
     public void refaccionCreada(){
         log.info("Se creo la refacción con numero de: {}", numero);
     }
+
+    public String mostrarDatos(){
+        return "Nombre: " + nombre +
+                "\nNumero: " + numero +
+                "\nStock: " + stock +
+                "\nPrecio actual:" + precioActual;
+    }
 }

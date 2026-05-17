@@ -1,13 +1,16 @@
 package org.github.dabson10.tallermecanico.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.exceptions.RefaccionDuplicateException;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class RefaccionService implements RefaccionServiceImpl{
     //Inyección de dependencias.
@@ -28,8 +31,32 @@ public class RefaccionService implements RefaccionServiceImpl{
 
     @Override
     public List<CatalogoRefaccion> crearMuchasRefacciones(List<CatalogoRefaccion> refacciones) {
-        return rePe.saveAll(refacciones);
+        List<CatalogoRefaccion> ref = new ArrayList<>(limpiarLista(rePe.findAllByNumero(), refacciones));
+        rePe.saveAll(ref);
+        return ref;
     }
+
+    public List<CatalogoRefaccion> limpiarLista(List<String>listaBD, List<CatalogoRefaccion>listNuevos ){
+        List<CatalogoRefaccion> listaLimpia = new ArrayList<>();
+        //Ahora en el mapa ponemos los datos de la lista obtenida de la base de datos.
+        Map<String, String> mapa = listaBD.stream().collect(Collectors.toMap(
+                x -> x,x -> x
+        )) ;
+        if(mapa.isEmpty()){
+            //Si el mapa esta vacío entonces regresamos una lista vacía.
+            log.warn("No hay datos en la base de datos.");
+            return listNuevos;
+        }
+        //Ahora buscaremos y eliminaremos los duplicados.
+        listNuevos.forEach(dato ->{
+            if(mapa.get(dato.getNumero()) == null){
+                listaLimpia.add(dato);
+            }
+        });
+        return listaLimpia;
+    }
+
+
 
     @Override
     public CatalogoRefaccion existenciaRefaccion(String numero) {

@@ -81,6 +81,15 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ClienteConVehiculoException.class)
+    public ResponseEntity<Map<String, String>> clienteConVehiculo(
+            ClienteConVehiculoException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 
 
 }

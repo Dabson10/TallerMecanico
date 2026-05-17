@@ -4,6 +4,7 @@ import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.entity.Vehiculo;
+import org.github.dabson10.tallermecanico.exceptions.ClienteConVehiculoException;
 import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.VehiculoDuplicateException;
 import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
@@ -40,6 +41,11 @@ public class VehiculoService implements VehiculoServiceImpl{
         //Obtenemos al cliente dueño del carro, pero si no lo encuentrá muestra una excepción
         Cliente cliente = cliRe.findByCorreo(vehiculo.getCorreoCliente()).orElseThrow(() ->
                 new ClienteNotFoundException("Cliente no encontrado."));
+        //Ahora validamos que el cliente no tenga un vehículo asociado.
+        if(cliente.getVehiculo() != null){
+            //Si es diferente a null entonces regreso una excepción.
+            throw new ClienteConVehiculoException("El cliente ya cuenta con un vehículo.");
+        }
         //Creamos el objeto que contendrá los valores del vehículo, obviamente en un DTO.
         VehiculoCompletoDTO vehiculoDTO = veMa.paraDTOCompleto(vehiculo);
         vehiculoDTO.setCliente(cliMa.paraClienteSimpleDTO(cliente));
