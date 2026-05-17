@@ -1,7 +1,8 @@
 package org.github.dabson10.tallermecanico.controller;
 
 import jakarta.validation.Valid;
-import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
 import org.github.dabson10.tallermecanico.service.VehiculoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ public class VehiculoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<VehiculoSimpleDTO> crearVehiculo(
-            @Valid @RequestBody VehiculoSimpleDTO vehiculo
+    public ResponseEntity<VehiculoCompletoDTO> crearVehiculo(
+            @Valid @RequestBody VehiculoCreateDTO vehiculo
     ){
-      vehiculo = veSe.crearVehiculo(vehiculo);
-      return new ResponseEntity<>(vehiculo, HttpStatus.CREATED);
+      VehiculoCompletoDTO car = veSe.crearVehiculo(vehiculo);
+      return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
 
 

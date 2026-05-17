@@ -34,6 +34,7 @@ public class Tecnico {
 
     @PrePersist
     public void newTecnico(){
+        this.activo = true;
         log.info("Se intentara crear un nuevo técnico llamado: {}", nombre);
     }
 

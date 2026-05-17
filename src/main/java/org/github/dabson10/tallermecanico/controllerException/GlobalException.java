@@ -1,9 +1,6 @@
 package org.github.dabson10.tallermecanico.controllerException;
 
-import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.CorreoDuplicateException;
-import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.VehiculoDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -76,6 +73,13 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+
+    @ExceptionHandler(VehiculoNotFoundException.class)
+    public ResponseEntity<Map<String, String>> vehiculoNoEncontrado(VehiculoNotFoundException ex){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 
 
 

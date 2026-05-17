@@ -5,9 +5,11 @@ import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequ
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
+import org.github.dabson10.tallermecanico.entity.Vehiculo;
 import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.OrdenNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.VehiculoNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.OrdenServicioMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
 import org.github.dabson10.tallermecanico.repository.OrdenServicioRepository;
@@ -49,6 +51,13 @@ public class OrdenService implements OrdenServiceImpl{
                 new ClienteNotFoundException("Cliente no encontrado."));
         Tecnico tecnico = teRe.findByCorreo(orden.getCorreoTecnico()).orElseThrow(() ->
                 new TecnicoNotFoundException("Técnico no encontrado."));
+
+        Vehiculo vehiculo = cliente.getVehiculo();
+        if(vehiculo == null){
+            //Si no hay vehiculo regresamos una excepción
+            throw new VehiculoNotFoundException("No hay un vehiculo asociado con el cliente.");
+        }
+
         //Creamos la orden, la guardamos en la base de datos y la regresamos.
         OrdenServicio ordenSe = seRe.save(orFor.crearOrden(cliente, tecnico, orden.getProblema()));
         return orMa.paraOrdenServicioCompletoDTO(ordenSe);

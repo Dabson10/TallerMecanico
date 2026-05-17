@@ -5,6 +5,9 @@ import org.github.dabson10.tallermecanico.exceptions.RefaccionDuplicateException
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class RefaccionService implements RefaccionServiceImpl{
     //Inyección de dependencias.
@@ -21,6 +24,11 @@ public class RefaccionService implements RefaccionServiceImpl{
             throw new RefaccionDuplicateException("Ingrese un código de refacción diferente");
         }
         return rePe.save(refaccion);
+    }
+
+    @Override
+    public List<CatalogoRefaccion> crearMuchasRefacciones(List<CatalogoRefaccion> refacciones) {
+        return rePe.saveAll(refacciones);
     }
 
     @Override

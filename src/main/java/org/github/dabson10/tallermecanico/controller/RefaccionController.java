@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/repair")
 public class RefaccionController {
@@ -24,6 +26,14 @@ public class RefaccionController {
             @Valid @RequestBody CatalogoRefaccion refaccion
     ){
         refaccion = reSe.crearRefaccion(refaccion);
+        return new ResponseEntity<>(refaccion, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/muchas")
+    public ResponseEntity<List<CatalogoRefaccion>> crearRefaccion(
+            @Valid @RequestBody List<CatalogoRefaccion> refaccion
+    ){
+        refaccion = reSe.crearMuchasRefacciones(refaccion);
         return new ResponseEntity<>(refaccion, HttpStatus.CREATED);
     }
 }

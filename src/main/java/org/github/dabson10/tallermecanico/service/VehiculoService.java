@@ -1,9 +1,14 @@
 package org.github.dabson10.tallermecanico.service;
 
-import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
+import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.entity.Vehiculo;
+import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.VehiculoDuplicateException;
+import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.mapper.VehiculoMapper;
+import org.github.dabson10.tallermecanico.repository.ClienteRepository;
 import org.github.dabson10.tallermecanico.repository.VehiculoRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +17,12 @@ public class VehiculoService implements VehiculoServiceImpl{
     //Inyección de dependencias.
     private final VehiculoRepository veRe;
     private final VehiculoMapper veMa;
-    public VehiculoService(VehiculoRepository veRe, VehiculoMapper veMa){
-        this.veRe = veRe;
-        this.veMa = veMa;
+    private final ClienteRepository cliRe;
+    private final ClienteMapper cliMa;
+    public VehiculoService(VehiculoRepository veRe, VehiculoMapper veMa,
+                           ClienteRepository cliRe, ClienteMapper cliMa){
+        this.veRe = veRe; this.veMa = veMa;
+        this.cliRe = cliRe;this.cliMa = cliMa;
     }
 
     /**
@@ -23,18 +31,25 @@ public class VehiculoService implements VehiculoServiceImpl{
      * @return : Regresará la clase simple con los datos guardados de la base de datos.
      */
     @Override
-    public VehiculoSimpleDTO crearVehiculo(VehiculoSimpleDTO vehiculo) {
+    public VehiculoCompletoDTO crearVehiculo(VehiculoCreateDTO vehiculo) {
         Vehiculo vehi = this.existenciaVehiculo(vehiculo.getPlacas());
         if(vehi != null){
             //Si se encontró algún usuario entonces regresamos
             throw new VehiculoDuplicateException("Placas de vehiculo existente.");
         }
-        vehi = veRe.save(veMa.paraVehiculo(vehiculo));
-        return veMa.paraVehiculoSimpleDTO(vehi);
+        //Obtenemos al cliente dueño del carro, pero si no lo encuentrá muestra una excepción
+        Cliente cliente = cliRe.findByCorreo(vehiculo.getCorreoCliente()).orElseThrow(() ->
+                new ClienteNotFoundException("Cliente no encontrado."));
+        //Creamos el objeto que contendrá los valores del vehículo, obviamente en un DTO.
+        VehiculoCompletoDTO vehiculoDTO = veMa.paraDTOCompleto(vehiculo);
+        vehiculoDTO.setCliente(cliMa.paraClienteSimpleDTO(cliente));
+        //Ahora validamos que el cliente exista.
+        vehi = veRe.save(veMa.paraVehiculoCompleto(vehiculoDTO));
+        return veMa.paraVehiculoCompletoDTO(vehi);
     }
 
     @Override
     public Vehiculo existenciaVehiculo(String placas) {
-        return veRe.findByPlacas(placas);
+        return veRe.findByPlacas(placas).orElse(null);
     }
 }
