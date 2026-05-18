@@ -7,10 +7,8 @@ import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.service.OrdenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/service")
@@ -27,6 +25,14 @@ public class OrdenServicioController {
             ){
         OrdenServicioCompletoDTO orden = orSe.crearOrden(ordenSer);
         return new ResponseEntity<>(orden, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/get")
+    public ResponseEntity<OrdenServicioCompletoDTO> traerOrden(
+            @Validated @PathVariable Long id
+    ){
+        OrdenServicioCompletoDTO orden = orSe.mostrarOrden(id);
+        return new ResponseEntity<>(orden, HttpStatus.OK);
     }
 
 

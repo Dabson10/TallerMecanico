@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
+import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.entity.Estados;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,5 +20,5 @@ public class OrdenServicioCompletoDTO {
     private Estados estado;
     private ClienteMedioDTO cliente;
     private TecnicoSimpleDTO tecnico;
-//    private List<DetalleOrden> detalles; debo ver que meter un simple o un completo en DTO
+    private List<DetalleSimpleDTO> detalles;
 }

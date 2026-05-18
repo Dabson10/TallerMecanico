@@ -18,7 +18,7 @@ import org.github.dabson10.tallermecanico.utility.OrdenFormat;
 import org.springframework.stereotype.Service;
 
 /**
- * Este service es para la clase {@code OrdenService}, para levantar órdenes nuevas de clientes o actualizarlas.
+ * Este service es para la clase {@code OrdenServicioRepository}, para levantar órdenes nuevas de clientes o actualizarlas.
  */
 @Service
 public class OrdenService implements OrdenServiceImpl{
@@ -61,6 +61,11 @@ public class OrdenService implements OrdenServiceImpl{
         //Creamos la orden, la guardamos en la base de datos y la regresamos.
         OrdenServicio ordenSe = seRe.save(orFor.crearOrden(cliente, tecnico, orden.getProblema()));
         return orMa.paraOrdenServicioCompletoDTO(ordenSe);
+    }
+
+    @Override
+    public OrdenServicioCompletoDTO mostrarOrden(Long id) {
+        return orMa.paraOrdenServicioCompletoDTO(this.traerOrden(id));
     }
 
     @Override

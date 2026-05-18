@@ -90,6 +90,23 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(RefaccionNotFoundException.class)
+    public ResponseEntity<Map<String, String>> refaccionNoEncontrado(
+            RefaccionNotFoundException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(OrdenNotFoundException.class)
+    public ResponseEntity<Map<String, String>> ordenNoEncontrada(
+            OrdenNotFoundException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 
 
 }

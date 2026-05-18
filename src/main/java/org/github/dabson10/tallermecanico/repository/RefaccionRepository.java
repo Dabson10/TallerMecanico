@@ -11,5 +11,6 @@ import java.util.List;
 public interface RefaccionRepository extends JpaRepository<CatalogoRefaccion, Long> {
     @Query("SELECT numero FROM CatalogoRefaccion")
     List<String> findAllByNumero();
+
     CatalogoRefaccion findByNumero(String numero);
 }
