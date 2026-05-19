@@ -3,9 +3,15 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 
+import java.util.List;
+
 public interface TecnicoServiceImpl {
     //Crea un nuevo tecnico.
     TecnicoSimpleDTO crearTecnico(TecnicoSimpleDTO tecnico);
-    //Valida que el tecnico exista.
+    //Listar los técnicos.
+    List<TecnicoSimpleDTO> listarTecnicos();
+    TecnicoSimpleDTO obtenerTecnico(String correo);
+
+    //Válida que el tecnico exista.
     Tecnico existenciaTecnico(String correo);
 }

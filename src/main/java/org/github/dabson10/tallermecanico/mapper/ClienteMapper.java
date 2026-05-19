@@ -1,10 +1,16 @@
 package org.github.dabson10.tallermecanico.mapper;
 
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteHistorialDTO;
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {OrdenServicioMapper.class})
 public interface ClienteMapper {
 
     /**
@@ -15,4 +21,8 @@ public interface ClienteMapper {
     Cliente paraCliente(ClienteSimpleDTO clienteDTO);
     ClienteSimpleDTO paraClienteSimpleDTO(Cliente cliente);
 
+
+    ClienteHistorialDTO paraClienteHistorialDTO(Cliente cliente);
+
+    List<ClienteMedioDTO> paraListaClienteMedio(List<Cliente> clientes);
 }

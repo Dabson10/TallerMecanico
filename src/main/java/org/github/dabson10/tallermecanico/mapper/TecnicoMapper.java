@@ -4,6 +4,8 @@ import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TecnicoMapper {
 
@@ -14,6 +16,9 @@ public interface TecnicoMapper {
      */
     Tecnico paraTecnico(TecnicoSimpleDTO tecnicoDTO);
     TecnicoSimpleDTO paraTecnicoSimpleDTO(Tecnico tecnico);
+
+    List<TecnicoSimpleDTO> paraTecnicosSimpleDTO(List<Tecnico> tecnicos);
+
     /**
      * Las siguientes funciones son para mapear de:<br>
      * ------------ Tecnico a TecnicoCompletDTO ------------- <br>

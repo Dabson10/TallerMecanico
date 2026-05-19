@@ -6,6 +6,8 @@ import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Vehiculo;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface VehiculoMapper {
     /**
@@ -21,6 +23,7 @@ public interface VehiculoMapper {
      */
     Vehiculo paraVehiculoCompleto(VehiculoCompletoDTO vehiculo);
     VehiculoCompletoDTO paraVehiculoCompletoDTO(Vehiculo vehiculo);
+    List<VehiculoCompletoDTO> paraVehiculosCompletosDTO(List<Vehiculo> vehiculos);
     /**
      * Las siguientes funciones son para formatear de: <br>
      */

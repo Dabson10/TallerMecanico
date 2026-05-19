@@ -1,23 +1,19 @@
 package org.github.dabson10.tallermecanico.dto.clienteDTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioHistorialDTO;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
-import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class ClienteCompletoDTO {
-    private Long id;
+@Getter @Setter
+public class ClienteHistorialDTO {
+    private Long id_cliente;
     private String nombre;
     private String apellido;
     private String telefono;
     private String correo;
-    //Vehículo con solo los atributos simples.
     private VehiculoSimpleDTO vehiculo;
-    //Lista de Órdenes simples.
+    private List<OrdenServicioHistorialDTO> ordenes;
 }

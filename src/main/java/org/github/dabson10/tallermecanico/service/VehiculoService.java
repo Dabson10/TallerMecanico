@@ -7,11 +7,14 @@ import org.github.dabson10.tallermecanico.entity.Vehiculo;
 import org.github.dabson10.tallermecanico.exceptions.ClienteConVehiculoException;
 import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.VehiculoDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.VehiculoNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.mapper.VehiculoMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
 import org.github.dabson10.tallermecanico.repository.VehiculoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class VehiculoService implements VehiculoServiceImpl{
@@ -52,6 +55,19 @@ public class VehiculoService implements VehiculoServiceImpl{
         //Ahora validamos que el cliente exista.
         vehi = veRe.save(veMa.paraVehiculoCompleto(vehiculoDTO));
         return veMa.paraVehiculoCompletoDTO(vehi);
+    }
+
+    @Override
+    public List<VehiculoCompletoDTO> traerVehiculos() {
+        return veMa.paraVehiculosCompletosDTO(veRe.findAll());
+    }
+
+    @Override
+    public VehiculoCompletoDTO traerVehiculo(String placa) {
+        Vehiculo vehiculo = this.existenciaVehiculo(placa);
+        if(vehiculo == null){ throw new VehiculoNotFoundException("Vehiculo no encontrado.");}
+        //Ahora regresamos el objeto sin antes formatearlo.
+        return veMa.paraVehiculoCompletoDTO(vehiculo);
     }
 
     @Override

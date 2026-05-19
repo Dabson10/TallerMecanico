@@ -6,10 +6,10 @@ import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
 import org.github.dabson10.tallermecanico.service.VehiculoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/car")
@@ -28,5 +28,20 @@ public class VehiculoController {
       return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
 
+
+    //Listar los vehiculos
+    @GetMapping("/list")
+    public ResponseEntity<List<VehiculoCompletoDTO>> listarVehiculos(){
+        List<VehiculoCompletoDTO> lista = veSe.traerVehiculos();
+        return new ResponseEntity<>(lista, HttpStatus.OK);
+    }
+
+    @GetMapping("/{placas}/get")
+    public ResponseEntity<VehiculoCompletoDTO> traerVehiculo(
+            @Validated @PathVariable String placas
+    ){
+        VehiculoCompletoDTO vehiculo = veSe.traerVehiculo(placas);
+        return new ResponseEntity<>(vehiculo, HttpStatus.OK);
+    }
 
 }

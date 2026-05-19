@@ -5,10 +5,10 @@ import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.service.TecnicoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tech")
@@ -26,6 +26,22 @@ public class TecnicoController {
         tecnico = teSe.crearTecnico(tecnico);
         return new ResponseEntity<>(tecnico, HttpStatus.CREATED);
     }
+
+
+    @GetMapping("/list")
+    public ResponseEntity<List<TecnicoSimpleDTO>> listarTecnicos(){
+        List<TecnicoSimpleDTO> lista = teSe.listarTecnicos();
+        return new ResponseEntity<>(lista, HttpStatus.OK);
+    }
+
+    @GetMapping("/{correo}/get")
+    public ResponseEntity<TecnicoSimpleDTO> obtenerTecnico(
+            @Validated @PathVariable String correo
+    ){
+        TecnicoSimpleDTO tecnico = teSe.obtenerTecnico(correo);
+        return new ResponseEntity<>(tecnico, HttpStatus.OK);
+    }
+
 
 
 }
