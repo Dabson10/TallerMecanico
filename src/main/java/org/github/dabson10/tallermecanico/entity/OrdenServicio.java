@@ -44,4 +44,12 @@ public class OrdenServicio {
         log.info("Se creo la orden a nombre de: {}", cliente.getNombre());
     }
 
+    public String mostrarDatos(){
+        return "id orden: " + id_orden +
+                "\nProblema: " + problema +
+                "\nFecha registro: " + fecha_registro  +
+                "\nEstado: " + estado  +
+                "\n" +
+                "\n";
+    }
 }

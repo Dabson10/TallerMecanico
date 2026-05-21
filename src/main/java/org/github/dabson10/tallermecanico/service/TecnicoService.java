@@ -1,8 +1,12 @@
 package org.github.dabson10.tallermecanico.service;
 
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
+import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.github.dabson10.tallermecanico.exceptions.CorreoDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.OrdenesEmptyException;
 import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.TecnicoMapper;
 import org.github.dabson10.tallermecanico.repository.TecnicoRepository;
@@ -35,11 +39,21 @@ public class TecnicoService implements TecnicoServiceImpl {
     }
 
     @Override
-    public TecnicoSimpleDTO obtenerTecnico(String correo) {
+    public TecnicoOrdenesDTO obtenerTecnico(String correo) {
+        //Obtenemos el correo y hacemos una validación
         Tecnico tecnico = this.existenciaTecnico(correo);
         if(tecnico == null){throw new TecnicoNotFoundException("Técnico no encontrado.");}
-        //Ahora toca regresar el objeto pero formateado.
-        return teMa.paraTecnicoSimpleDTO(tecnico);
+        //Ahora teniendo al tecnico filtramos sus órdenes. Sin antes validar que al menos tenga una.
+        if(tecnico.getOrdenes().isEmpty()){
+            //Si está vacío entonces regresamos.
+            throw new OrdenesEmptyException("El técnico no tiene ordenes asignadas.");
+        }
+        //Filtramos la lista de órdenes a las órdenes que aún no se han entregado.
+        List<OrdenServicio> ordenFiltro = tecnico.getOrdenes().stream()
+                .filter(orden -> !orden.getEstado().equals(Estados.ENTREGADO)).toList();
+        //Ahora toca mapear los datos de Tecnico a TecnicoOrdenDTO.
+        tecnico.setOrdenes(ordenFiltro);
+        return teMa.paraTecnicoOrdenesDTO(tecnico);
     }
 
     @Override

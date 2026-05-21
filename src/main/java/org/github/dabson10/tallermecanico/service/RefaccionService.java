@@ -3,6 +3,7 @@ package org.github.dabson10.tallermecanico.service;
 import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.exceptions.RefaccionDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.RefaccionNotFoundException;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -34,6 +35,19 @@ public class RefaccionService implements RefaccionServiceImpl{
         List<CatalogoRefaccion> ref = new ArrayList<>(limpiarLista(rePe.findAllByNumero(), refacciones));
         rePe.saveAll(ref);
         return ref;
+    }
+
+    @Override
+    public List<CatalogoRefaccion> listaRefacciones() {
+        return rePe.findAll();
+    }
+
+    @Override
+    public CatalogoRefaccion traerRefaccion(String numero) {
+        CatalogoRefaccion refaccion = this.existenciaRefaccion(numero);
+        if(refaccion == null){throw new RefaccionNotFoundException("No se encontró la refacción");}
+        //Ahora teniendo la refacción la regresamos.
+        return refaccion;
     }
 
     public List<CatalogoRefaccion> limpiarLista(List<String>listaBD, List<CatalogoRefaccion>listNuevos ){

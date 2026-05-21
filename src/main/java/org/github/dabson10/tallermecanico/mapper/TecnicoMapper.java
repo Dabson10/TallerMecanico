@@ -1,12 +1,13 @@
 package org.github.dabson10.tallermecanico.mapper;
 
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {OrdenServicioMapper.class})
 public interface TecnicoMapper {
 
     /**
@@ -24,4 +25,8 @@ public interface TecnicoMapper {
      * ------------ Tecnico a TecnicoCompletDTO ------------- <br>
      * ------------ TecnicoCompletoDTO a Tecnico -------------
      */
+
+
+
+    TecnicoOrdenesDTO paraTecnicoOrdenesDTO(Tecnico tecnico);
 }

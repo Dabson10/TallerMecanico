@@ -107,6 +107,15 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(OrdenesEmptyException.class)
+    public ResponseEntity<Map<String, String>> tecnicoSinOrdenes(
+            OrdenesEmptyException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 
 
 }

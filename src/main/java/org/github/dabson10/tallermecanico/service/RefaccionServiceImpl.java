@@ -8,5 +8,9 @@ public interface RefaccionServiceImpl {
     CatalogoRefaccion crearRefaccion(CatalogoRefaccion refaccion);
     List<CatalogoRefaccion> crearMuchasRefacciones(List<CatalogoRefaccion> refacciones);
 
+    List<CatalogoRefaccion> listaRefacciones();
+
+    CatalogoRefaccion traerRefaccion(String numero);
+
     CatalogoRefaccion existenciaRefaccion(String numero);
 }

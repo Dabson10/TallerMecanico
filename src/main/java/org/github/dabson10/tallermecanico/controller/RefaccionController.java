@@ -5,10 +5,8 @@ import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.service.RefaccionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +33,19 @@ public class RefaccionController {
     ){
         refaccion = reSe.crearMuchasRefacciones(refaccion);
         return new ResponseEntity<>(refaccion, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<CatalogoRefaccion>> listaRefacciones(){
+        List<CatalogoRefaccion> refaccion = reSe.listaRefacciones();
+        return new ResponseEntity<>(refaccion, HttpStatus.OK);
+    }
+
+    @GetMapping("/{numero}/get")
+    public ResponseEntity<CatalogoRefaccion> obtenerRefaccion(
+            @Validated @PathVariable String numero
+    ){
+        CatalogoRefaccion refaccion = reSe.traerRefaccion(numero);
+        return new ResponseEntity<>(refaccion, HttpStatus.OK);
     }
 }
