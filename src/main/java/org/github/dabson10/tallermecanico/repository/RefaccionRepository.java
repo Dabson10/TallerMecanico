@@ -12,5 +12,8 @@ public interface RefaccionRepository extends JpaRepository<CatalogoRefaccion, Lo
     @Query("SELECT numero FROM CatalogoRefaccion")
     List<String> findAllByNumero();
 
+    List<CatalogoRefaccion> findByStockIsLessThan(Integer cantidad);
+
+    //Busca una refacción por número.
     CatalogoRefaccion findByNumero(String numero);
 }

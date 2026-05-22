@@ -10,7 +10,9 @@ public interface RefaccionServiceImpl {
 
     List<CatalogoRefaccion> listaRefacciones();
 
+    //Traer una refacción mediante su numero.
     CatalogoRefaccion traerRefaccion(String numero);
-
+    //Traer refacciones con un stock menor a 5
+    List<CatalogoRefaccion> listStock();
     CatalogoRefaccion existenciaRefaccion(String numero);
 }

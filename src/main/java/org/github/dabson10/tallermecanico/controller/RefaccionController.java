@@ -48,4 +48,10 @@ public class RefaccionController {
         CatalogoRefaccion refaccion = reSe.traerRefaccion(numero);
         return new ResponseEntity<>(refaccion, HttpStatus.OK);
     }
+
+    @GetMapping("/list/stock")
+    public ResponseEntity<List<CatalogoRefaccion>> refaccionPocasCantidades(){
+        List<CatalogoRefaccion> list = reSe.listStock();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

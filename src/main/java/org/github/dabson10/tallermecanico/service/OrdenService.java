@@ -2,10 +2,8 @@ package org.github.dabson10.tallermecanico.service;
 
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
-import org.github.dabson10.tallermecanico.entity.Cliente;
-import org.github.dabson10.tallermecanico.entity.OrdenServicio;
-import org.github.dabson10.tallermecanico.entity.Tecnico;
-import org.github.dabson10.tallermecanico.entity.Vehiculo;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
+import org.github.dabson10.tallermecanico.entity.*;
 import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.OrdenNotFoundException;
 import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
@@ -16,6 +14,9 @@ import org.github.dabson10.tallermecanico.repository.OrdenServicioRepository;
 import org.github.dabson10.tallermecanico.repository.TecnicoRepository;
 import org.github.dabson10.tallermecanico.utility.OrdenFormat;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Este service es para la clase {@code OrdenServicioRepository}, para levantar órdenes nuevas de clientes o actualizarlas.
@@ -63,11 +64,40 @@ public class OrdenService implements OrdenServiceImpl{
         return orMa.paraOrdenServicioCompletoDTO(ordenSe);
     }
 
+    /**
+     * Esta función sirve para mostrar una orden y formatear los datos de la orden
+     * @param id : Se hace una búsqueda mediante él, id de esta.
+     * @return : Regresará los datos limpios y formateados.
+     */
     @Override
     public OrdenServicioCompletoDTO mostrarOrden(Long id) {
         return orMa.paraOrdenServicioCompletoDTO(this.traerOrden(id));
     }
 
+    @Override
+    public List<OrdenSinDetallesDTO> listarOrdenes() {
+        return orMa.paraOrdenesSinDetallesDTO(seRe.findAll());
+    }
+
+    @Override
+    public List<OrdenSinDetallesDTO> ordenesCorreCliente(String correo) {
+        List<OrdenServicio> orden = seRe.findOrdenServicioByCliente_Correo(correo);
+        if(orden.isEmpty()){ throw new OrdenNotFoundException("El cliente no tiene ordenes."); }
+        return orMa.paraOrdenesSinDetallesDTO(orden);
+    }
+
+    @Override
+    public List<OrdenSinDetallesDTO> ordenesCorreoTecnico(String correo) {
+        List<OrdenServicio> orden = seRe.findOrdenServicioByTecnico_CorreoAndEstadoNot(correo, Estados.ENTREGADO);
+        if(orden.isEmpty()){ throw new OrdenNotFoundException("El técnico no tiene ordenes."); }
+        return orMa.paraOrdenesSinDetallesDTO(orden);
+    }
+
+    /**
+     * Esta función sirve para buscar una orden y regresará un exception si no la encuentra.
+     * @param id : Id de la orden
+     * @return : Datos completos de la orden.
+     */
     @Override
     public OrdenServicio traerOrden(Long id) {
         return seRe.findById(id).orElseThrow(() ->

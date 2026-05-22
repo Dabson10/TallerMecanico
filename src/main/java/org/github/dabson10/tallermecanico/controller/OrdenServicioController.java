@@ -3,12 +3,15 @@ package org.github.dabson10.tallermecanico.controller;
 import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.service.OrdenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/service")
@@ -33,6 +36,31 @@ public class OrdenServicioController {
     ){
         OrdenServicioCompletoDTO orden = orSe.mostrarOrden(id);
         return new ResponseEntity<>(orden, HttpStatus.OK);
+    }
+
+    //Lista todas las ordenes sin detalles en cada una.
+    @GetMapping("/list")
+    public ResponseEntity<List<OrdenSinDetallesDTO>> listOrdenesSinDetalles(){
+        List<OrdenSinDetallesDTO> ordenes = orSe.listarOrdenes();
+        return new ResponseEntity<>(ordenes, HttpStatus.OK);
+    }
+
+    //Busca una orden con el correo del cliente
+    @GetMapping("/cliente")
+    public ResponseEntity<List<OrdenSinDetallesDTO>> ordenesCliente(
+            @RequestParam(name = "correo", required = true) String correo
+    ){
+        List<OrdenSinDetallesDTO> lista = orSe.ordenesCorreCliente(correo);
+        return new ResponseEntity<>(lista, HttpStatus.OK);
+    }
+
+    //Buscar un técnico mediante su correo electrónico.
+    @GetMapping("/tecnico")
+    public ResponseEntity<List<OrdenSinDetallesDTO>> ordenesTecnico(
+            @RequestParam (name = "correo", required = true) String correo
+    ){
+        List<OrdenSinDetallesDTO> ordenes = orSe.ordenesCorreoTecnico(correo);
+        return new ResponseEntity<>(ordenes, HttpStatus.OK);
     }
 
 

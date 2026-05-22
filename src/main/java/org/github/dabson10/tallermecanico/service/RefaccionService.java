@@ -50,6 +50,11 @@ public class RefaccionService implements RefaccionServiceImpl{
         return refaccion;
     }
 
+    @Override
+    public List<CatalogoRefaccion> listStock() {
+        return rePe.findByStockIsLessThan(5);
+    }
+
     public List<CatalogoRefaccion> limpiarLista(List<String>listaBD, List<CatalogoRefaccion>listNuevos ){
         List<CatalogoRefaccion> listaLimpia = new ArrayList<>();
         //Ahora en el mapa ponemos los datos de la lista obtenida de la base de datos.
