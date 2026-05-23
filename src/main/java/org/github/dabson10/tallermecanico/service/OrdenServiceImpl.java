@@ -3,6 +3,7 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
+import org.github.dabson10.tallermecanico.entity.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface OrdenServiceImpl {
     List<OrdenSinDetallesDTO> ordenesCorreCliente(String correo);
     //Busca órdenes de técnicos mediante el correo.
     List<OrdenSinDetallesDTO> ordenesCorreoTecnico(String correo);
+    //Busca ordenes con cierto estado.
+    List<OrdenSinDetallesDTO> ordenesEstado(Estados estados);
 
     //Traer una orden mediante su ID//Sirve para validar existencias.
     OrdenServicio traerOrden(Long id);

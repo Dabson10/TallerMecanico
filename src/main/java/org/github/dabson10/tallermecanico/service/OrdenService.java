@@ -93,6 +93,13 @@ public class OrdenService implements OrdenServiceImpl{
         return orMa.paraOrdenesSinDetallesDTO(orden);
     }
 
+    @Override
+    public List<OrdenSinDetallesDTO> ordenesEstado(Estados estados) {
+        List<OrdenServicio> orden = seRe.findOrdenServicioByEstado(estados);
+        if(orden.isEmpty()){ throw new OrdenNotFoundException("No se encontraron ordenes con ese estado."); }
+        return orMa.paraOrdenesSinDetallesDTO(orden);
+    }
+
     /**
      * Esta función sirve para buscar una orden y regresará un exception si no la encuentra.
      * @param id : Id de la orden

@@ -2,6 +2,7 @@ package org.github.dabson10.tallermecanico.controller;
 
 import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleNuevoDTO;
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetallesCompletoDTO;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.service.DetalleService;
 import org.github.dabson10.tallermecanico.utility.OrdenFormat;
@@ -22,10 +23,10 @@ public class DetalleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<DetalleOrden> crearOrden(
+    public ResponseEntity<DetallesCompletoDTO> crearOrden(
             @Valid @RequestBody DetalleNuevoDTO detalle
             ){
-        DetalleOrden det = deSe.crearDetalles(detalle);
+        DetallesCompletoDTO det = deSe.crearDetalles(detalle);
         return new ResponseEntity<>(det, HttpStatus.CREATED);
     }
 

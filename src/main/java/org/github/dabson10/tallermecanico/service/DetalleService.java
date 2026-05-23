@@ -2,10 +2,12 @@ package org.github.dabson10.tallermecanico.service;
 
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleNuevoDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetallesCompletoDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.exceptions.RefaccionNotFoundException;
+import org.github.dabson10.tallermecanico.mapper.DetallesMapper;
 import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,16 @@ public class DetalleService implements DetalleServiceImpl{
     private final DetalleRepository deRe;
     private final RefaccionRepository reRe;
     private final OrdenService orRe;
+    private final DetallesMapper deMa;
     public DetalleService(DetalleRepository deRe, RefaccionRepository reRe,
-                          OrdenService orRe){
+                          OrdenService orRe, DetallesMapper deMa){
         this.deRe = deRe;
         this.reRe = reRe;
         this.orRe = orRe;
+        this.deMa = deMa;
     }
     @Override
-    public DetalleOrden crearDetalles(DetalleNuevoDTO detalleOrden) {
+    public DetallesCompletoDTO crearDetalles(DetalleNuevoDTO detalleOrden) {
         DetalleOrden detalles = new DetalleOrden();
         //Vamos a validar que exista la orden
         OrdenServicio orden = orRe.traerOrden(detalleOrden.getId_orden());
@@ -38,6 +42,8 @@ public class DetalleService implements DetalleServiceImpl{
         detalles.setPrecio_unitario(refaccion.getPrecioActual());
         detalles.setOrdenServicio(orden);
         detalles.setRefaccion(refaccion);
-        return deRe.save(detalles);
+        //Aquí regresamos el objeto formateado
+        detalles = deRe.save(detalles);
+        return deMa.paraDetallesCompletoDTO(detalles);
     }
 }

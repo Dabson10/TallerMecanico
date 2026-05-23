@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
+import org.github.dabson10.tallermecanico.entity.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.service.OrdenService;
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,15 @@ public class OrdenServicioController {
             @RequestParam (name = "correo", required = true) String correo
     ){
         List<OrdenSinDetallesDTO> ordenes = orSe.ordenesCorreoTecnico(correo);
+        return new ResponseEntity<>(ordenes, HttpStatus.OK);
+    }
+
+    //Buscar ordenes mediante su estado.
+    @GetMapping("/estatus/{estado}")
+    public ResponseEntity<List<OrdenSinDetallesDTO>> ordenesEstado(
+            @Validated @PathVariable Estados estado
+            ){
+        List<OrdenSinDetallesDTO> ordenes = orSe.ordenesEstado(estado);
         return new ResponseEntity<>(ordenes, HttpStatus.OK);
     }
 
