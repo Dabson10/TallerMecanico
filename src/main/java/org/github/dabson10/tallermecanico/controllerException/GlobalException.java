@@ -3,7 +3,6 @@ package org.github.dabson10.tallermecanico.controllerException;
 import org.github.dabson10.tallermecanico.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,40 +45,6 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(VehiculoDuplicateException.class)
-    public ResponseEntity<Map<String, String>> vehiculoDuplicado(
-            VehiculoDuplicateException ex
-    ){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(ClienteNotFoundException.class)
-    public ResponseEntity<Map<String, String>> clienteNoEncontrado(
-            ClienteNotFoundException ex
-    ){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(TecnicoNotFoundException.class)
-    public ResponseEntity<Map<String, String>> tecnicoNoEncontrado(
-            TecnicoNotFoundException ex
-    ){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-
-    @ExceptionHandler(VehiculoNotFoundException.class)
-    public ResponseEntity<Map<String, String>> vehiculoNoEncontrado(VehiculoNotFoundException ex){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
 
     @ExceptionHandler(ClienteConVehiculoException.class)
     public ResponseEntity<Map<String, String>> clienteConVehiculo(
@@ -90,22 +55,6 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(RefaccionNotFoundException.class)
-    public ResponseEntity<Map<String, String>> refaccionNoEncontrado(
-            RefaccionNotFoundException ex
-    ){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-    @ExceptionHandler(OrdenNotFoundException.class)
-    public ResponseEntity<Map<String, String>> ordenNoEncontrada(
-            OrdenNotFoundException ex
-    ){
-        Map<String, String> error = new HashMap<>();
-        error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
 
     @ExceptionHandler(OrdenesEmptyException.class)
     public ResponseEntity<Map<String, String>> tecnicoSinOrdenes(
@@ -116,6 +65,22 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> entidadNoEncontrada(
+            EntityNotFoundException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(EntityDuplicateException.class)
+    public ResponseEntity<Map<String, String>> entidadesDuplicadas(
+            EntityDuplicateException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 
 }

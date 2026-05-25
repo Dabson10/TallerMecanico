@@ -4,10 +4,7 @@ import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioComp
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
 import org.github.dabson10.tallermecanico.entity.*;
-import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.OrdenNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.VehiculoNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.*;
 import org.github.dabson10.tallermecanico.mapper.OrdenServicioMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
 import org.github.dabson10.tallermecanico.repository.OrdenServicioRepository;
@@ -49,14 +46,14 @@ public class OrdenService implements OrdenServiceImpl{
     public OrdenServicioCompletoDTO crearOrden(OrdenServicioRequerimientoDTO orden) {
         //Obtenemos el correo del cliente y técnico y si no se encuentra entonces regresamos una excepción.
         Cliente cliente = cliRe.findByCorreo(orden.getCorreoCliente()).orElseThrow(() ->
-                new ClienteNotFoundException("Cliente no encontrado."));
+                new EntityNotFoundException("Cliente no encontrado."));
         Tecnico tecnico = teRe.findByCorreo(orden.getCorreoTecnico()).orElseThrow(() ->
-                new TecnicoNotFoundException("Técnico no encontrado."));
+                new EntityNotFoundException("Técnico no encontrado."));
 
         Vehiculo vehiculo = cliente.getVehiculo();
         if(vehiculo == null){
             //Si no hay vehiculo regresamos una excepción
-            throw new VehiculoNotFoundException("No hay un vehiculo asociado con el cliente.");
+            throw new EntityNotFoundException("No hay un vehiculo asociado con el cliente.");
         }
 
         //Creamos la orden, la guardamos en la base de datos y la regresamos.
@@ -82,21 +79,21 @@ public class OrdenService implements OrdenServiceImpl{
     @Override
     public List<OrdenSinDetallesDTO> ordenesCorreCliente(String correo) {
         List<OrdenServicio> orden = seRe.findOrdenServicioByCliente_Correo(correo);
-        if(orden.isEmpty()){ throw new OrdenNotFoundException("El cliente no tiene ordenes."); }
+        if(orden.isEmpty()){ throw new EntityNotFoundException("El cliente no tiene ordenes."); }
         return orMa.paraOrdenesSinDetallesDTO(orden);
     }
 
     @Override
     public List<OrdenSinDetallesDTO> ordenesCorreoTecnico(String correo) {
         List<OrdenServicio> orden = seRe.findOrdenServicioByTecnico_CorreoAndEstadoNot(correo, Estados.ENTREGADO);
-        if(orden.isEmpty()){ throw new OrdenNotFoundException("El técnico no tiene ordenes."); }
+        if(orden.isEmpty()){ throw new EntityNotFoundException("El técnico no tiene ordenes."); }
         return orMa.paraOrdenesSinDetallesDTO(orden);
     }
 
     @Override
     public List<OrdenSinDetallesDTO> ordenesEstado(Estados estados) {
         List<OrdenServicio> orden = seRe.findOrdenServicioByEstado(estados);
-        if(orden.isEmpty()){ throw new OrdenNotFoundException("No se encontraron ordenes con ese estado."); }
+        if(orden.isEmpty()){ throw new EntityNotFoundException("No se encontraron ordenes con ese estado."); }
         return orMa.paraOrdenesSinDetallesDTO(orden);
     }
 
@@ -108,6 +105,6 @@ public class OrdenService implements OrdenServiceImpl{
     @Override
     public OrdenServicio traerOrden(Long id) {
         return seRe.findById(id).orElseThrow(() ->
-                new OrdenNotFoundException("Orden no existente."));
+                new EntityNotFoundException("Orden no existente."));
     }
 }

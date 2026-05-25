@@ -1,12 +1,11 @@
 package org.github.dabson10.tallermecanico.service;
 
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleNuevoDTO;
-import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetallesCompletoDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
-import org.github.dabson10.tallermecanico.exceptions.RefaccionNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.DetallesMapper;
 import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
@@ -31,11 +30,14 @@ public class DetalleService implements DetalleServiceImpl{
         DetalleOrden detalles = new DetalleOrden();
         //Vamos a validar que exista la orden
         OrdenServicio orden = orRe.traerOrden(detalleOrden.getId_orden());
+        if (orden == null) {
+            throw new EntityNotFoundException("No se encontró la orden. Ingrese una correcta.");
+        }
         //Teniendo el valor de los detalles toca validar si existen
         CatalogoRefaccion refaccion = reRe.findByNumero(detalleOrden.getNumero());
         if(refaccion == null){
             //Si es null entonces regresamos una excepción.
-            throw new RefaccionNotFoundException("No se encontró la refacción");
+            throw new EntityNotFoundException("No se encontró la refacción. Ingrese una correcta.");
         }
         //Guardamos la orden en los detalles y la refacción.
         detalles.setCantidad(detalleOrden.getCantidad());

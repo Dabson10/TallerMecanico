@@ -5,9 +5,7 @@ import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
-import org.github.dabson10.tallermecanico.exceptions.CorreoDuplicateException;
-import org.github.dabson10.tallermecanico.exceptions.OrdenesEmptyException;
-import org.github.dabson10.tallermecanico.exceptions.TecnicoNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.*;
 import org.github.dabson10.tallermecanico.mapper.TecnicoMapper;
 import org.github.dabson10.tallermecanico.repository.TecnicoRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class TecnicoService implements TecnicoServiceImpl {
     public TecnicoSimpleDTO crearTecnico(TecnicoSimpleDTO tecnico) {
         Tecnico tec = this.existenciaTecnico(tecnico.getCorreo());
         if(tec != null){
-            throw new CorreoDuplicateException("Ingrese un correo diferente.");
+            throw new EntityDuplicateException("Técnico existente. Ingrese un correo diferente.");
         }
         tec = teRe.save(teMa.paraTecnico(tecnico));
         return teMa.paraTecnicoSimpleDTO(tec);
@@ -42,7 +40,7 @@ public class TecnicoService implements TecnicoServiceImpl {
     public TecnicoOrdenesDTO obtenerTecnico(String correo) {
         //Obtenemos el correo y hacemos una validación
         Tecnico tecnico = this.existenciaTecnico(correo);
-        if(tecnico == null){throw new TecnicoNotFoundException("Técnico no encontrado.");}
+        if(tecnico == null){throw new EntityNotFoundException("Técnico no encontrado.");}
         //Ahora teniendo al tecnico filtramos sus órdenes. Sin antes validar que al menos tenga una.
         if(tecnico.getOrdenes().isEmpty()){
             //Si está vacío entonces regresamos.

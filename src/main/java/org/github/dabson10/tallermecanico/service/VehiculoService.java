@@ -4,10 +4,7 @@ import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.entity.Vehiculo;
-import org.github.dabson10.tallermecanico.exceptions.ClienteConVehiculoException;
-import org.github.dabson10.tallermecanico.exceptions.ClienteNotFoundException;
-import org.github.dabson10.tallermecanico.exceptions.VehiculoDuplicateException;
-import org.github.dabson10.tallermecanico.exceptions.VehiculoNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.*;
 import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.mapper.VehiculoMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
@@ -39,11 +36,11 @@ public class VehiculoService implements VehiculoServiceImpl{
         Vehiculo vehi = this.existenciaVehiculo(vehiculo.getPlacas());
         if(vehi != null){
             //Si se encontró algún usuario entonces regresamos
-            throw new VehiculoDuplicateException("Placas de vehiculo existente.");
+            throw new EntityDuplicateException("Placas de vehiculo existente.");
         }
         //Obtenemos al cliente dueño del carro, pero si no lo encuentrá muestra una excepción
         Cliente cliente = cliRe.findByCorreo(vehiculo.getCorreoCliente()).orElseThrow(() ->
-                new ClienteNotFoundException("Cliente no encontrado."));
+                new EntityNotFoundException("Cliente no encontrado."));
         //Ahora validamos que el cliente no tenga un vehículo asociado.
         if(cliente.getVehiculo() != null){
             //Si es diferente a null entonces regreso una excepción.
@@ -65,7 +62,7 @@ public class VehiculoService implements VehiculoServiceImpl{
     @Override
     public VehiculoCompletoDTO traerVehiculo(String placa) {
         Vehiculo vehiculo = this.existenciaVehiculo(placa);
-        if(vehiculo == null){ throw new VehiculoNotFoundException("Vehiculo no encontrado.");}
+        if(vehiculo == null){ throw new EntityNotFoundException("Vehiculo no encontrado.");}
         //Ahora regresamos el objeto sin antes formatearlo.
         return veMa.paraVehiculoCompletoDTO(vehiculo);
     }

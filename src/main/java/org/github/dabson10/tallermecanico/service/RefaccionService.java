@@ -2,8 +2,8 @@ package org.github.dabson10.tallermecanico.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
-import org.github.dabson10.tallermecanico.exceptions.RefaccionDuplicateException;
-import org.github.dabson10.tallermecanico.exceptions.RefaccionNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.EntityDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class RefaccionService implements RefaccionServiceImpl{
         CatalogoRefaccion ref = this.existenciaRefaccion(refaccion.getNumero());
         if(ref != null){
             //Si existe la refacción mostramos una exception.
-            throw new RefaccionDuplicateException("Ingrese un código de refacción diferente");
+            throw new EntityDuplicateException("Ingrese un código de refacción diferente");
         }
         return rePe.save(refaccion);
     }
@@ -45,7 +45,7 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public CatalogoRefaccion traerRefaccion(String numero) {
         CatalogoRefaccion refaccion = this.existenciaRefaccion(numero);
-        if(refaccion == null){throw new RefaccionNotFoundException("No se encontró la refacción");}
+        if(refaccion == null){throw new EntityNotFoundException("No se encontró la refacción");}
         //Ahora teniendo la refacción la regresamos.
         return refaccion;
     }
