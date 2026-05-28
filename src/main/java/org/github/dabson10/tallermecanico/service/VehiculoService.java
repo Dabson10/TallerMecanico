@@ -2,6 +2,8 @@ package org.github.dabson10.tallermecanico.service;
 
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.entity.Vehiculo;
 import org.github.dabson10.tallermecanico.exceptions.*;
@@ -9,6 +11,7 @@ import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.mapper.VehiculoMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
 import org.github.dabson10.tallermecanico.repository.VehiculoRepository;
+import org.github.dabson10.tallermecanico.utility.actualizarDatos.DatosVehiculoUpdate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +23,14 @@ public class VehiculoService implements VehiculoServiceImpl{
     private final VehiculoMapper veMa;
     private final ClienteRepository cliRe;
     private final ClienteMapper cliMa;
+    private final DatosVehiculoUpdate veUp;
+
     public VehiculoService(VehiculoRepository veRe, VehiculoMapper veMa,
-                           ClienteRepository cliRe, ClienteMapper cliMa){
+                           ClienteRepository cliRe, ClienteMapper cliMa,
+                           DatosVehiculoUpdate veUp){
         this.veRe = veRe; this.veMa = veMa;
-        this.cliRe = cliRe;this.cliMa = cliMa;
+        this.cliRe = cliRe; this.cliMa = cliMa;
+        this.veUp = veUp;
     }
 
     /**
@@ -65,6 +72,22 @@ public class VehiculoService implements VehiculoServiceImpl{
         if(vehiculo == null){ throw new EntityNotFoundException("Vehiculo no encontrado.");}
         //Ahora regresamos el objeto sin antes formatearlo.
         return veMa.paraVehiculoCompletoDTO(vehiculo);
+    }
+
+    @Override
+    public VehiculoSimpleDTO actualizarVehiculo(VehiculoUpdateDTO vehiculoDTO) {
+        Vehiculo vehiculo = this.existenciaVehiculo(vehiculoDTO.getPlacas());
+        //Validamos que el vehículo exista.
+        if (vehiculo == null) {
+            throw new EntityNotFoundException("No se encontró ningún vehiculo con esas placas.");
+        }
+        //Ahora que sabemos que el vehículo existe tendremos que realizar los cambios de los datos.
+        //*En el objeto vehículo realizamos los cambios de datos.
+        vehiculo = veUp.datosVehiculoUpdate(vehiculoDTO, vehiculo);
+        //*Realizamos la actualización
+        vehiculo = veRe.save(vehiculo);
+        //*Ahora regresamos los valores al controller.
+        return veMa.paraVehiculoSimpleDTO(vehiculo);
     }
 
     @Override

@@ -32,6 +32,9 @@ public class Tecnico {
     @OneToMany(mappedBy = "tecnico")
     private List<OrdenServicio> ordenes;
 
+    public Boolean cambioEstado(){
+        return !activo;
+    }
     @PrePersist
     public void newTecnico(){
         this.activo = true;

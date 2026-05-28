@@ -3,6 +3,7 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteHistorialDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface ClienteServiceImpl {
     ClienteHistorialDTO traerCliente(String correo);
 
     //Función para editar datos del cliente.
-    ClienteSimpleDTO actualizarCliente();
+    ClienteSimpleDTO actualizarCliente(ClienteUpdateDTO cliente);
 
     //Función para saber si el cliente existe.
     public Cliente existenciaCliente(String correo);

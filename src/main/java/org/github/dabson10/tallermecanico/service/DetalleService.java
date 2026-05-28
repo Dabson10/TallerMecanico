@@ -5,6 +5,7 @@ import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetallesCompletoDT
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
+import org.github.dabson10.tallermecanico.exceptions.CantidadNoValidaException;
 import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.DetallesMapper;
 import org.github.dabson10.tallermecanico.repository.DetalleRepository;
@@ -39,6 +40,21 @@ public class DetalleService implements DetalleServiceImpl{
             //Si es null entonces regresamos una excepción.
             throw new EntityNotFoundException("No se encontró la refacción. Ingrese una correcta.");
         }
+        //Ahora restamos la cantidad en stock de la refacción con lo que se solicita
+        Integer stock = refaccion.getStock();
+        if(stock <= 0){
+            throw new CantidadNoValidaException("No hay refacciones disponibles en stock");
+        }
+        //Ahora restamos el stock con la cantidad que se quiere obtener
+        stock = stock - detalleOrden.getCantidad();
+        System.out.println("Cantidad es: " + stock);
+        if(stock < 0){
+            throw new CantidadNoValidaException("No se junta la cantidad de refacciones que necesitas.");
+        }
+        //Ahora que ya tenemos el valor toca actualizar la columna de la base de datos con los nuevos datos.
+        refaccion.setStock(stock);
+        refaccion = reRe.save(refaccion);
+
         //Guardamos la orden en los detalles y la refacción.
         detalles.setCantidad(detalleOrden.getCantidad());
         detalles.setPrecio_unitario(refaccion.getPrecioActual());

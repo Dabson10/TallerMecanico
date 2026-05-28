@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteHistorialDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.service.ClienteService;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,13 @@ public class ClienteController {
     public ResponseEntity<List<ClienteMedioDTO>> listarClientes(){
         List<ClienteMedioDTO> clientes = cliSe.listarClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ClienteSimpleDTO> actualizarCliente
+            (@Valid @RequestBody ClienteUpdateDTO cliente){
+        ClienteSimpleDTO clienteDTO = cliSe.actualizarCliente(cliente);
+        return new ResponseEntity<>(clienteDTO, HttpStatus.CREATED);
     }
 
     /**

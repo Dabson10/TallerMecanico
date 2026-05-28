@@ -26,7 +26,7 @@ public class CatalogoRefaccion {
     @NotBlank(message = "Ingrese un numero.")
     private String numero;
     @NotNull(message = "Ingrese una cantidad.")
-    @Positive(message = "Las cantidades deben de ser positivo.")
+    @Min(0)
     private Integer stock;
     @NotNull(message = "Ingrese un precio.")
     @Positive(message = "El precio debe de ser positivo.")

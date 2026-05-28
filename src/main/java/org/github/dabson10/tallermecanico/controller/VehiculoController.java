@@ -3,6 +3,8 @@ package org.github.dabson10.tallermecanico.controller;
 import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoCreateDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.vehiculoDTO.VehiculoUpdateDTO;
 import org.github.dabson10.tallermecanico.service.VehiculoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,14 @@ public class VehiculoController {
             @Validated @PathVariable String placas
     ){
         VehiculoCompletoDTO vehiculo = veSe.traerVehiculo(placas);
+        return new ResponseEntity<>(vehiculo, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<VehiculoSimpleDTO> actualizarVehiculo(
+            @Valid @RequestBody VehiculoUpdateDTO vehiculoUp
+            ){
+        VehiculoSimpleDTO vehiculo = veSe.actualizarVehiculo(vehiculoUp);
         return new ResponseEntity<>(vehiculo, HttpStatus.OK);
     }
 

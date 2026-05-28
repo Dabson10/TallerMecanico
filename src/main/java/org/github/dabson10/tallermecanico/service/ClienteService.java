@@ -3,11 +3,13 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteHistorialDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.github.dabson10.tallermecanico.exceptions.EntityDuplicateException;
 import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
+import org.github.dabson10.tallermecanico.utility.DatosClienteUpdate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +19,12 @@ public class ClienteService implements ClienteServiceImpl{
     //Inyección de dependencias.
     private final ClienteRepository cliRe;
     private final ClienteMapper cliMa;
-
-    public ClienteService(ClienteRepository cliRe, ClienteMapper cliMa){
+    private final DatosClienteUpdate cliUp;
+    public ClienteService(ClienteRepository cliRe, ClienteMapper cliMa,
+                          DatosClienteUpdate cliUp){
         this.cliRe= cliRe;
         this.cliMa = cliMa;
+        this.cliUp = cliUp;
     }
 
     /**
@@ -55,8 +59,20 @@ public class ClienteService implements ClienteServiceImpl{
     }
 
     @Override
-    public ClienteSimpleDTO actualizarCliente() {
-        return null;
+    public ClienteSimpleDTO actualizarCliente(ClienteUpdateDTO cliente) {
+        //Obtenemos el cliente mediante su correo electronico.
+        Cliente client = this.existenciaCliente(cliente.getCorreo());
+        if (client == null) {
+            throw new EntityNotFoundException("Cliente no encontrado. Ingrese un cliente existente.");
+        }
+        //Creamos un objeto de clienteSimple con los datos del cliente obtenidos de la base de datos.
+        ClienteSimpleDTO clienteDTO = cliMa.paraClienteSimpleDTO(client);
+        //Ahora ya teniendo los valores en clienteSimple toca formatear los datos para actualizar.
+        clienteDTO = cliUp.actualizarDatosCliente(clienteDTO, cliente);
+        //Realizamos el guardado o actualización en el objeto cliente.
+        client = cliRe.save(cliMa.paraCliente(clienteDTO));
+        //Regresamos el valor formateado a clienteSimple.
+        return cliMa.paraClienteSimpleDTO(client);
     }
 
     /**

@@ -83,4 +83,18 @@ public class GlobalException {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(CantidadNoValidaException.class)
+    public ResponseEntity<Map<String, String>> sinCantidades(CantidadNoValidaException ex){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Map<String, String>> valorNull(
+            NullPointerException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

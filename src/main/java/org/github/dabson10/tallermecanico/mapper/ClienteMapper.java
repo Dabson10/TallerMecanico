@@ -3,10 +3,12 @@ package org.github.dabson10.tallermecanico.mapper;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteHistorialDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
+import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.Cliente;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
