@@ -16,9 +16,7 @@ public abstract class DetallesMapper {
     @Lazy
     private OrdenServicioMapper ordenMapper;
 
-    DetalleSimpleDTO paraDetalleSimpleDTO(DetalleOrden detalle) {
-        return null;
-    }
+    public abstract DetalleSimpleDTO paraDetalleSimpleDTO(DetalleOrden detalleOrden);
 
     public abstract List<DetalleSimpleDTO> paraDetallesSimplesDTO(List<DetalleOrden> detalles);
 

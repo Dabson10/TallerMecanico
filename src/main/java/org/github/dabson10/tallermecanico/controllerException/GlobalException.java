@@ -56,9 +56,9 @@ public class GlobalException {
     }
 
 
-    @ExceptionHandler(OrdenesEmptyException.class)
+    @ExceptionHandler(ListaVaciaException.class)
     public ResponseEntity<Map<String, String>> tecnicoSinOrdenes(
-            OrdenesEmptyException ex
+            ListaVaciaException ex
     ){
         Map<String, String> error = new HashMap<>();
         error.put(ex.getClass().getSimpleName(), ex.getMessage());

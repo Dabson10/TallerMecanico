@@ -48,7 +48,7 @@ public class TecnicoService implements TecnicoServiceImpl {
         //Ahora teniendo al tecnico filtramos sus órdenes. Sin antes validar que al menos tenga una.
         if(tecnico.getOrdenes().isEmpty()){
             //Si está vacío entonces regresamos.
-            throw new OrdenesEmptyException("El técnico no tiene ordenes asignadas.");
+            throw new ListaVaciaException("El técnico no tiene ordenes asignadas.");
         }
         //Filtramos la lista de órdenes a las órdenes que aún no se han entregado.
         List<OrdenServicio> ordenFiltro = tecnico.getOrdenes().stream()

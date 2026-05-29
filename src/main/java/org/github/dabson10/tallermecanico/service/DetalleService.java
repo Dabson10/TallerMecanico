@@ -1,16 +1,24 @@
 package org.github.dabson10.tallermecanico.service;
 
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleCantidadDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleNuevoDTO;
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetallesCompletoDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.exceptions.CantidadNoValidaException;
 import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
+import org.github.dabson10.tallermecanico.exceptions.ListaVaciaException;
 import org.github.dabson10.tallermecanico.mapper.DetallesMapper;
 import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class DetalleService implements DetalleServiceImpl{
@@ -63,5 +71,37 @@ public class DetalleService implements DetalleServiceImpl{
         //Aquí regresamos el objeto formateado
         detalles = deRe.save(detalles);
         return deMa.paraDetallesCompletoDTO(detalles);
+    }
+
+    @Override
+    public List<DetalleSimpleDTO> listarOrdenDetalles(Long id) {
+        List<DetalleOrden> detalles = deRe.listarDetalles(id);
+        detalles.forEach(p -> {
+            System.out.println(p.toString());
+        });
+        if(detalles.isEmpty()){
+            throw new ListaVaciaException("No hay detalles con ese id de orden.");
+        }
+        //Teniendo los datos toca regresar.
+        return deMa.paraDetallesSimplesDTO(detalles);
+    }
+
+    @Override
+    public Map<String, Float> calcularTotal(Long id) {
+        //*Buscamos un detalle y validamos que exista.
+        DetalleOrden detalle = deRe.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("No se encontró detalle con ese ID."));
+        //-Ahora obtenemos el total del producto.
+        Float tot = detalle.getCantidad() * detalle.getPrecio_unitario();
+        //*Ahora regresamos un mapa con los datos formateados.
+        return Map.of("Total ", tot);
+    }
+
+    @Override
+    public DetalleSimpleDTO cambiarCantidad(DetalleCantidadDTO detalle) {
+        //Validamos que
+        DetalleOrden detalleO = deRe.findById(detalle.getId_detalle_orden()).orElseThrow(
+                () -> new EntityNotFoundException("No se encontró detalle con ese ID."));
+        return null;
     }
 }
