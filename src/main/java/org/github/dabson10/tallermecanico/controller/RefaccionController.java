@@ -54,4 +54,9 @@ public class RefaccionController {
         List<CatalogoRefaccion> list = reSe.listStock();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> actualizardatos(){
+        return new ResponseEntity<>(0, HttpStatus.OK);
+    }
 }

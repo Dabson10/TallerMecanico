@@ -1,5 +1,6 @@
 package org.github.dabson10.tallermecanico.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleCantidadDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleNuevoDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
@@ -15,11 +16,9 @@ import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Slf4j
 @Service
 public class DetalleService implements DetalleServiceImpl{
     //Inyección de dependencias.
@@ -99,9 +98,46 @@ public class DetalleService implements DetalleServiceImpl{
 
     @Override
     public DetalleSimpleDTO cambiarCantidad(DetalleCantidadDTO detalle) {
-        //Validamos que
+        //Validamos que exista el detalle
         DetalleOrden detalleO = deRe.findById(detalle.getId_detalle_orden()).orElseThrow(
                 () -> new EntityNotFoundException("No se encontró detalle con ese ID."));
-        return null;
+
+        CatalogoRefaccion refaccion = detalleO.getRefaccion();
+        //-Ahora debemos hacer un cambio en las cantidades, primero debemos saber si la cantidad de cambio
+        //-es menor o mayor a la cantidad de refacciones guardadas inicialmente en los detalles
+        int cantidadDB = detalleO.getCantidad();
+        int cantidadNew = detalle.getCantidad();
+        int nuevaCantidad ;
+        int cantRefacionDB = refaccion.getStock();
+
+        if(cantidadDB > cantidadNew) {
+            //*Si la cantidad de detalles de la base de datos es mayor al valor nuevo entonces hacemos la resta sobre el de la BD.
+            nuevaCantidad = cantidadDB - cantidadNew;
+            /*~~Ahora teniendo el valor de la resta de la cantidad de detalle y el stock tenemos que guardar
+             ~~ el nuevo detalle sumando al stock de base de datos y en detalle hacer el cambio de cantidades.
+             ~~*/
+            detalleO.setCantidad(detalle.getCantidad());
+            //Guardamos la nueva cantidad que es la suma del stock mismo + la cantidad que se quería cambiar.
+            refaccion.setStock( refaccion.getStock() + nuevaCantidad  );
+
+        }else if(cantidadDB < cantidadNew)  {
+            nuevaCantidad = cantidadNew - cantidadDB;
+            detalleO.setCantidad(detalle.getCantidad());
+            refaccion.setStock(refaccion.getStock() - nuevaCantidad);
+            validarStock(refaccion.getStock());
+            log.info("2.El valor de detalles es: {}, y de refacción es: {}", detalleO.getCantidad(),refaccion.getStock() );
+        }else{
+            //Si son iguales entonces no hace cambios.
+            throw new CantidadNoValidaException("Ingrese una cantidad diferente a la del producto.");
+        }
+        //Ahora terminando la funcionalidad toca guardar los datos, esto en refaccion y en detalles.
+        reRe.save(refaccion);
+        detalleO = deRe.save(detalleO);
+        return deMa.paraDetalleSimpleDTO(detalleO);
+    }
+    public void validarStock(int stock){
+        if(stock < 0){
+            throw new CantidadNoValidaException("No hay cantidad en stock.");
+        }
     }
 }
