@@ -1,4 +1,4 @@
-package org.github.dabson10.tallermecanico.utility;
+package org.github.dabson10.tallermecanico.utility.actualizarDatos;
 
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteUpdateDTO;

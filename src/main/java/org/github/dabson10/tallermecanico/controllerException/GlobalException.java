@@ -1,5 +1,6 @@
 package org.github.dabson10.tallermecanico.controllerException;
 
+import jakarta.validation.ConstraintViolationException;
 import org.github.dabson10.tallermecanico.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,26 @@ public class GlobalException {
             MethodArgumentNotValidException ex
     ){
         Map<String, String> error = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(p -> {
-            error.put(p.getField(), p.getDefaultMessage());
+        ex.getBindingResult().getFieldErrors().forEach(p -> error.put(p.getField(), p.getDefaultMessage()));
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> errorSecundarioEntity(
+            ConstraintViolationException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        ex.getConstraintViolations().forEach(viol ->{
+            String clase = viol.getPropertyPath().toString();
+            String mensaje = viol.getMessage();
+            error.put(clase, mensaje);
         });
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Captura la excepción de correo duplicado.
      * @param ex : Excepción capturada.
-     * @return : Regresara un JSON con el valor del error.
+     * @return : Regresará un JSON con el valor del error.
      */
     @ExceptionHandler(CorreoDuplicateException.class)
     public ResponseEntity<Map<String, String>> correoDuplicado(

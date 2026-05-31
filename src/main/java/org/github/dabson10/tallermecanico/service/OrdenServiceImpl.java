@@ -3,7 +3,7 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
-import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 
 import java.util.List;

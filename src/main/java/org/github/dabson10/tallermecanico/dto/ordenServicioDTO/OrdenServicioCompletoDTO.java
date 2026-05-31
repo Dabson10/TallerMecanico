@@ -6,8 +6,7 @@ import lombok.Setter;
 import org.github.dabson10.tallermecanico.dto.clienteDTO.ClienteMedioDTO;
 import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
-import org.github.dabson10.tallermecanico.entity.DetalleOrden;
-import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import java.time.LocalDate;
 import java.util.List;
 

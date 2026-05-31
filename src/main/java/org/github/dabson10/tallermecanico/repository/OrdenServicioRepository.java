@@ -2,7 +2,7 @@ package org.github.dabson10.tallermecanico.repository;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

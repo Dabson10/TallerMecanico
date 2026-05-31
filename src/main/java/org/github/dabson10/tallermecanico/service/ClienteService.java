@@ -9,7 +9,7 @@ import org.github.dabson10.tallermecanico.exceptions.EntityDuplicateException;
 import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
 import org.github.dabson10.tallermecanico.mapper.ClienteMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
-import org.github.dabson10.tallermecanico.utility.DatosClienteUpdate;
+import org.github.dabson10.tallermecanico.utility.actualizarDatos.DatosClienteUpdate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

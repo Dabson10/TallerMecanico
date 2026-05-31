@@ -1,7 +1,7 @@
 package org.github.dabson10.tallermecanico.utility;
 
 import org.github.dabson10.tallermecanico.entity.Cliente;
-import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.springframework.stereotype.Component;

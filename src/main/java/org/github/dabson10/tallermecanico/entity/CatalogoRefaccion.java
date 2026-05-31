@@ -26,7 +26,7 @@ public class CatalogoRefaccion {
     @NotBlank(message = "Ingrese un numero.")
     private String numero;
     @NotNull(message = "Ingrese una cantidad.")
-    @Min(0)
+    @Min(value = 0, message = "Ingrese una cantidad valida")
     private Integer stock;
     @NotNull(message = "Ingrese un precio.")
     @Positive(message = "El precio debe de ser positivo.")
@@ -47,5 +47,9 @@ public class CatalogoRefaccion {
                 "\nNumero: " + numero +
                 "\nStock: " + stock +
                 "\nPrecio actual:" + precioActual;
+    }
+    @PostRemove
+    public void antesDeEliminar(){
+        log.warn("Estas por eliminar datos.");
     }
 }

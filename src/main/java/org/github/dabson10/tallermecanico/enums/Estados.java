@@ -1,4 +1,4 @@
-package org.github.dabson10.tallermecanico.entity;
+package org.github.dabson10.tallermecanico.enums;
 
 import lombok.Getter;
 import org.github.dabson10.tallermecanico.exceptions.EstadoNotFoundException;

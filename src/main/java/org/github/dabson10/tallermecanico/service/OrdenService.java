@@ -4,6 +4,7 @@ import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioComp
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
 import org.github.dabson10.tallermecanico.entity.*;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.exceptions.*;
 import org.github.dabson10.tallermecanico.mapper.OrdenServicioMapper;
 import org.github.dabson10.tallermecanico.repository.ClienteRepository;
@@ -12,7 +13,6 @@ import org.github.dabson10.tallermecanico.repository.TecnicoRepository;
 import org.github.dabson10.tallermecanico.utility.OrdenFormat;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

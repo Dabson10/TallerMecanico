@@ -1,6 +1,7 @@
 package org.github.dabson10.tallermecanico.controller;
 
 import jakarta.validation.Valid;
+import org.github.dabson10.tallermecanico.dto.refaccionDTO.RefaccionUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.service.RefaccionService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/repair")
@@ -56,7 +58,18 @@ public class RefaccionController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> actualizardatos(){
-        return new ResponseEntity<>(0, HttpStatus.OK);
+    public ResponseEntity<CatalogoRefaccion> actualizarDatos(
+            @Valid @RequestBody RefaccionUpdateDTO refaccion
+            ){
+        CatalogoRefaccion ref = reSe.editarRefaccion(refaccion);
+        return new ResponseEntity<>(ref, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> eliminarRefaccion(
+            @Validated @RequestParam(required = true, name = "numero") String numero
+    ){
+        Map<String, String> mapa = reSe.eliminarPorNumero(numero);
+        return new ResponseEntity<>(mapa, HttpStatus.OK);
     }
 }

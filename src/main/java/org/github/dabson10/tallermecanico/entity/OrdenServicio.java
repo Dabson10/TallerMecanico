@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.github.dabson10.tallermecanico.enums.Estados;
+
 import java.time.LocalDate;
 import java.util.List;
 

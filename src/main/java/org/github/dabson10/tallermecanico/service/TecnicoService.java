@@ -3,7 +3,7 @@ package org.github.dabson10.tallermecanico.service;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoUpdateDataDTO;
-import org.github.dabson10.tallermecanico.entity.Estados;
+import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.github.dabson10.tallermecanico.exceptions.*;
