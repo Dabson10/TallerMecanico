@@ -100,12 +100,21 @@ public class GlobalException {
         error.put(ex.getClass().getSimpleName(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Map<String, String>> valorNull(
-            NullPointerException ex
+
+    @ExceptionHandler(EntityFoundException.class)
+    public ResponseEntity<Map<String, String>> claseEncontrada(
+            EntityFoundException ex
     ){
         Map<String, String> error = new HashMap<>();
         error.put(ex.getClass().getSimpleName(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(EstadoNotFoundException.class)
+    public ResponseEntity<Map<String, String>> errorDeEstado(
+            EstadoNotFoundException ex
+    ){
+        Map<String, String> error = new HashMap<>();
+        error.put(ex.getClass().getSimpleName(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }

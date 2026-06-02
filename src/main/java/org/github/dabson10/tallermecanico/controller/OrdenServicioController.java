@@ -3,6 +3,7 @@ package org.github.dabson10.tallermecanico.controller;
 import jakarta.validation.Valid;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
 import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.service.OrdenService;
@@ -70,6 +71,14 @@ public class OrdenServicioController {
             ){
         List<OrdenSinDetallesDTO> ordenes = orSe.ordenesEstado(estado);
         return new ResponseEntity<>(ordenes, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<OrdenServicioSimpleDTO> cambiarEstadoOrden(
+            @Validated @PathVariable Long id
+    ){
+        OrdenServicioSimpleDTO orden = orSe.actaulizarEstado(id);
+        return new ResponseEntity<>(orden, HttpStatus.OK);
     }
 
 

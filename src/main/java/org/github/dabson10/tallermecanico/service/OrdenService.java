@@ -2,6 +2,7 @@ package org.github.dabson10.tallermecanico.service;
 
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioRequerimientoDTO;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
 import org.github.dabson10.tallermecanico.entity.*;
 import org.github.dabson10.tallermecanico.enums.Estados;
@@ -95,6 +96,16 @@ public class OrdenService implements OrdenServiceImpl{
         List<OrdenServicio> orden = seRe.findOrdenServicioByEstado(estados);
         if(orden.isEmpty()){ throw new EntityNotFoundException("No se encontraron ordenes con ese estado."); }
         return orMa.paraOrdenesSinDetallesDTO(orden);
+    }
+
+    @Override
+    public OrdenServicioSimpleDTO actaulizarEstado(Long id) {
+        //-Traemos y validamos que exista una orden.
+        OrdenServicio orden = this.traerOrden(id);
+        //Ahora realizamos el cambio de estado.
+        orden.setEstado(orden.cambiarEstado());
+        orden = seRe.save(orden);
+        return orMa.paraOrdenSimpleDTO(orden);
     }
 
     /**

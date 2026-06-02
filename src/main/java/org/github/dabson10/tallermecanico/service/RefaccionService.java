@@ -1,12 +1,15 @@
 package org.github.dabson10.tallermecanico.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.refaccionDTO.RefaccionUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
 import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.exceptions.CantidadNoValidaException;
 import org.github.dabson10.tallermecanico.exceptions.EntityDuplicateException;
+import org.github.dabson10.tallermecanico.exceptions.EntityFoundException;
 import org.github.dabson10.tallermecanico.exceptions.EntityNotFoundException;
+import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.github.dabson10.tallermecanico.utility.actualizarDatos.RefaccionDatosUpdate;
 import org.springframework.stereotype.Service;
@@ -21,13 +24,13 @@ import java.util.stream.Collectors;
 public class RefaccionService implements RefaccionServiceImpl{
     //Inyección de dependencias.
     private final RefaccionRepository reRe;
-    private final DetalleOrden deOr;
     private final RefaccionDatosUpdate reUp;
+    private final DetalleRepository deRe;
     public RefaccionService(RefaccionRepository reRe, RefaccionDatosUpdate reUp,
-                            DetalleOrden deOr){
+                            DetalleRepository deRe){
         this.reRe = reRe;
         this.reUp = reUp;
-        this.deOr = deOr;
+        this.deRe = deRe;
     }
 
     @Override
@@ -80,7 +83,6 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public Map<String, String> eliminarPorNumero(String numero) {
         CatalogoRefaccion ref = this.existenciaRefaccion(numero);
-
         //Valida la existencia de una refacción.
         if(ref == null){
             throw new EntityNotFoundException("No se encontró refacción con ese numero.");
@@ -90,14 +92,16 @@ public class RefaccionService implements RefaccionServiceImpl{
             throw new CantidadNoValidaException("Para eliminar un producto, este debe no tener cantidades almacenadas.");
         }
         //Ahora validamos si la refacción tiene algún detalle.
-        DetalleOrden detalle = new DetalleOrden();
-
+        boolean existe = deRe.existenciaDeRefaccionEnDetalles(ref.getNumero());
+        if(existe){
+            //Si la refacción tiene detalles guardados entonces regresamos una exception
+            throw new EntityFoundException("La refacción ya tiene detalles, no se podrá borrar.");
+        }
+        //Como no hay valores relacionados en DetalleOrden entonces eliminamos.
         long eliminado = reRe.deleteByNumero(numero);
         String mensaje = (eliminado == 1) ? "Eliminado." : "No eliminado" ;
-        Map<String, String> mapa = new HashMap<>();
-        mapa.put("Eliminar Refacción", ("Refacción con numero " + numero + ", " + mensaje ));
 
-        return mapa;
+        return Map.of("Eliminar Refacción", ("Refacción con numero " + numero + ", " + mensaje ));
     }
 
 

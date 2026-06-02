@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.enums.Estados;
+import org.github.dabson10.tallermecanico.exceptions.EstadoNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +36,24 @@ public class OrdenServicio {
     private List<DetalleOrden> detalles;
 
     public OrdenServicio(){}
+
+    public Estados cambiarEstado(){
+        switch(estado){
+            case RECIBIDO -> {
+                return Estados.EN_PROCESO;
+            }
+            case EN_PROCESO -> {
+                return Estados.LISTO;
+            }
+            case LISTO -> {
+                return Estados.ENTREGADO;
+            }
+            default ->{
+                throw new EstadoNotFoundException("Ya no se puede cambiar el estado de la orden.");
+            }
+
+        }
+    }
 
     @PrePersist
     public void newOrden(){
