@@ -1,10 +1,8 @@
 package org.github.dabson10.tallermecanico.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.github.dabson10.tallermecanico.dto.detalleOrdenDTO.DetalleSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.refaccionDTO.RefaccionUpdateDTO;
 import org.github.dabson10.tallermecanico.entity.CatalogoRefaccion;
-import org.github.dabson10.tallermecanico.entity.DetalleOrden;
 import org.github.dabson10.tallermecanico.exceptions.CantidadNoValidaException;
 import org.github.dabson10.tallermecanico.exceptions.EntityDuplicateException;
 import org.github.dabson10.tallermecanico.exceptions.EntityFoundException;
@@ -13,21 +11,22 @@ import org.github.dabson10.tallermecanico.repository.DetalleRepository;
 import org.github.dabson10.tallermecanico.repository.RefaccionRepository;
 import org.github.dabson10.tallermecanico.utility.actualizarDatos.RefaccionDatosUpdate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class RefaccionService implements RefaccionServiceImpl{
-    //Inyección de dependencias.
+public class RefaccionService implements RefaccionServiceImpl {
+    // Inyección de dependencias.
     private final RefaccionRepository reRe;
     private final RefaccionDatosUpdate reUp;
     private final DetalleRepository deRe;
+
     public RefaccionService(RefaccionRepository reRe, RefaccionDatosUpdate reUp,
-                            DetalleRepository deRe){
+            DetalleRepository deRe) {
         this.reRe = reRe;
         this.reUp = reUp;
         this.deRe = deRe;
@@ -36,8 +35,8 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public CatalogoRefaccion crearRefaccion(CatalogoRefaccion refaccion) {
         CatalogoRefaccion ref = this.existenciaRefaccion(refaccion.getNumero());
-        if(ref != null){
-            //Si existe la refacción mostramos una exception.
+        if (ref != null) {
+            // Si existe la refacción mostramos una exception.
             throw new EntityDuplicateException("Ingrese un código de refacción diferente");
         }
         return reRe.save(refaccion);
@@ -58,8 +57,10 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public CatalogoRefaccion traerRefaccion(String numero) {
         CatalogoRefaccion refaccion = this.existenciaRefaccion(numero);
-        if(refaccion == null){throw new EntityNotFoundException("No se encontró la refacción");}
-        //Ahora teniendo la refacción la regresamos.
+        if (refaccion == null) {
+            throw new EntityNotFoundException("No se encontró la refacción");
+        }
+        // Ahora teniendo la refacción la regresamos.
         return refaccion;
     }
 
@@ -71,10 +72,11 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public CatalogoRefaccion editarRefaccion(RefaccionUpdateDTO refaccionDTO) {
         CatalogoRefaccion refaccion = this.traerRefaccion(refaccionDTO.getNumero());
-        if(refaccion == null){
+        if (refaccion == null) {
             throw new EntityNotFoundException("Entidad no encontrada.");
         }
-        //~~Ahora realizamos los cambios en la de los datos nuevos a los de la base de datos.
+        // ~~Ahora realizamos los cambios en la de los datos nuevos a los de la base de
+        // datos.
         refaccion = reUp.actualizarDatos(refaccion, refaccionDTO);
 
         return reRe.save(refaccion);
@@ -83,48 +85,48 @@ public class RefaccionService implements RefaccionServiceImpl{
     @Override
     public Map<String, String> eliminarPorNumero(String numero) {
         CatalogoRefaccion ref = this.existenciaRefaccion(numero);
-        //Valida la existencia de una refacción.
-        if(ref == null){
+        // Valida la existencia de una refacción.
+        if (ref == null) {
             throw new EntityNotFoundException("No se encontró refacción con ese numero.");
         }
-        //Validación para no eliminar las refacciones con al menos un 1 en almacén.
-        if(ref.getStock() > 0){
-            throw new CantidadNoValidaException("Para eliminar un producto, este debe no tener cantidades almacenadas.");
+        // Validación para no eliminar las refacciones con al menos un 1 en almacén.
+        if (ref.getStock() > 0) {
+            throw new CantidadNoValidaException(
+                    "Para eliminar un producto, este debe no tener cantidades almacenadas.");
         }
-        //Ahora validamos si la refacción tiene algún detalle.
+        // Ahora validamos si la refacción tiene algún detalle.
         boolean existe = deRe.existenciaDeRefaccionEnDetalles(ref.getNumero());
-        if(existe){
-            //Si la refacción tiene detalles guardados entonces regresamos una exception
+        if (existe) {
+            // Si la refacción tiene detalles guardados entonces regresamos una exception
             throw new EntityFoundException("La refacción ya tiene detalles, no se podrá borrar.");
         }
-        //Como no hay valores relacionados en DetalleOrden entonces eliminamos.
+        // Como no hay valores relacionados en DetalleOrden entonces eliminamos.
         long eliminado = reRe.deleteByNumero(numero);
-        String mensaje = (eliminado == 1) ? "Eliminado." : "No eliminado" ;
+        String mensaje = (eliminado == 1) ? "Eliminado." : "No eliminado";
 
-        return Map.of("Eliminar Refacción", ("Refacción con numero " + numero + ", " + mensaje ));
+        return Map.of("Eliminar Refacción", ("Refacción con numero " + numero + ", " + mensaje));
     }
-
 
     @Override
     public CatalogoRefaccion existenciaRefaccion(String numero) {
         return reRe.findByNumero(numero);
     }
 
-    //Funciones extras.
-    public List<CatalogoRefaccion> limpiarLista(List<String>listaBD, List<CatalogoRefaccion>listNuevos ){
+    // Funciones extras.
+    @Transactional
+    public List<CatalogoRefaccion> limpiarLista(List<String> listaBD, List<CatalogoRefaccion> listNuevos) {
         List<CatalogoRefaccion> listaLimpia = new ArrayList<>();
-        //Ahora en el mapa ponemos los datos de la lista obtenida de la base de datos.
+        // Ahora en el mapa ponemos los datos de la lista obtenida de la base de datos.
         Map<String, String> mapa = listaBD.stream().collect(Collectors.toMap(
-                x -> x,x -> x
-        )) ;
-        if(mapa.isEmpty()){
-            //Si el mapa esta vacío entonces regresamos una lista vacía.
+                x -> x, x -> x));
+        if (mapa.isEmpty()) {
+            // Si el mapa esta vacío entonces regresamos una lista vacía.
             log.warn("No hay datos en la base de datos.");
             return listNuevos;
         }
-        //Ahora buscaremos y eliminaremos los duplicados.
-        listNuevos.forEach(dato ->{
-            if(mapa.get(dato.getNumero()) == null){
+        // Ahora buscaremos y eliminaremos los duplicados.
+        listNuevos.forEach(dato -> {
+            if (mapa.get(dato.getNumero()) == null) {
                 listaLimpia.add(dato);
             }
         });
