@@ -1,9 +1,11 @@
 package org.github.dabson10.tallermecanico.mapper;
 
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -29,4 +31,7 @@ public interface TecnicoMapper {
 
 
     TecnicoOrdenesDTO paraTecnicoOrdenesDTO(Tecnico tecnico);
+
+    TecnicoCompletoDTO paraTecnicoCompletoDTO(Tecnico tecnico);
+
 }

@@ -1,5 +1,8 @@
 package org.github.dabson10.tallermecanico.service;
 
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoSNTecnicoDTO;
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoUpdateDataDTO;
@@ -7,6 +10,7 @@ import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.github.dabson10.tallermecanico.exceptions.*;
+import org.github.dabson10.tallermecanico.mapper.OrdenServicioMapper;
 import org.github.dabson10.tallermecanico.mapper.TecnicoMapper;
 import org.github.dabson10.tallermecanico.repository.TecnicoRepository;
 import org.github.dabson10.tallermecanico.utility.actualizarDatos.TecnicoDatosUpdate;
@@ -20,10 +24,11 @@ public class TecnicoService implements TecnicoServiceImpl {
     private final TecnicoRepository teRe;
     private final TecnicoMapper teMa;
     private final TecnicoDatosUpdate teUp;
+    private final OrdenServicioMapper orMa;
     public TecnicoService(TecnicoRepository teRe, TecnicoMapper teMa,
-                          TecnicoDatosUpdate teUp){
+                          TecnicoDatosUpdate teUp, OrdenServicioMapper orMa){
         this.teRe = teRe; this.teMa = teMa;
-        this.teUp = teUp;
+        this.teUp = teUp; this.orMa = orMa;
     }
     @Override
     public TecnicoSimpleDTO crearTecnico(TecnicoSimpleDTO tecnico) {
@@ -89,5 +94,20 @@ public class TecnicoService implements TecnicoServiceImpl {
     @Override
     public Tecnico existenciaTecnico(String correo) {
         return teRe.findByCorreo(correo).orElse(null);
+    }
+
+    @Override
+    public TecnicoCompletoDTO logTecnico(String correo) {
+        //Obtenemos los datos del tecnico de un DTO.
+        Tecnico tec = this.existenciaTecnico(correo);
+        if(tec == null){
+            //Si es igual a null entonces regresamos una exception.
+            throw new EntityNotFoundException("No se encontró el técnico");
+        }
+        //Obtenemos los datos de la base de datos.
+        tec = teRe.tecnicoYSusOrdenes(correo);
+        //Ahora realizamos un mapeo de Tecnico a TecnicoCompletoDTO
+        TecnicoCompletoDTO tecnicoCom = teMa.paraTecnicoCompletoDTO(tec);
+        return tecnicoCom;
     }
 }

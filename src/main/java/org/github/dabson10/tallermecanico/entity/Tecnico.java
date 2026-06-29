@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -17,6 +14,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Tecnico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +28,7 @@ public class Tecnico {
     @NotNull(message = "Ingrese un estado del técnico.")
     private Boolean activo;
     @OneToMany(mappedBy = "tecnico")
+    @ToString.Exclude
     private List<OrdenServicio> ordenes;
 
     public Boolean cambioEstado(){

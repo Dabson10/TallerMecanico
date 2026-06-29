@@ -1,9 +1,6 @@
 package org.github.dabson10.tallermecanico.mapper;
 
-import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioCompletoDTO;
-import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioHistorialDTO;
-import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenServicioSimpleDTO;
-import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.OrdenSinDetallesDTO;
+import org.github.dabson10.tallermecanico.dto.ordenServicioDTO.*;
 import org.github.dabson10.tallermecanico.entity.OrdenServicio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +8,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {DetallesMapper.class} )
+@Mapper(componentModel = "spring", uses = {DetallesMapper.class, ClienteMapper.class} )
 public interface OrdenServicioMapper {
     /**
      * Las siguientes funciones son para convertir de una clase <br>
@@ -29,4 +26,6 @@ public interface OrdenServicioMapper {
     List<OrdenSinDetallesDTO> paraOrdenesSinDetallesDTO(List<OrdenServicio> orden);
 
     OrdenServicioSimpleDTO paraOrdenSimpleDTO(OrdenServicio orden);
+
+    OrdenServicioCompletoSNTecnicoDTO paraOrdenServicioCompDTO(OrdenServicio orden);
 }

@@ -1,5 +1,6 @@
 package org.github.dabson10.tallermecanico.service;
 
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoUpdateDataDTO;
@@ -19,4 +20,6 @@ public interface TecnicoServiceImpl {
     TecnicoSimpleDTO tecnicoEstado(String correo);
     //Válida que el tecnico exista.
     Tecnico existenciaTecnico(String correo);
+    //Función para logear a técnicos.
+    TecnicoCompletoDTO logTecnico(String correo);
 }

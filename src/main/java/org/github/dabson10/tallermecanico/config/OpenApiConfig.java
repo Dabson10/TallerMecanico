@@ -16,4 +16,5 @@ public class OpenApiConfig {
                 .title("Springboot_Swagger Project OpenAPI Docs")
                 .version("1.0.0").description("Doc Description"));
     }
+    //http://localhost:8080/swagger-ui/index.html
 }

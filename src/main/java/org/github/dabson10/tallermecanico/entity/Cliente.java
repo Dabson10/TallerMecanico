@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter @Setter
 //@NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +34,7 @@ public class Cliente {
     @OneToOne(mappedBy = "cliente")
     private Vehiculo vehiculo;
     @OneToMany(mappedBy = "cliente")
+    @ToString.Exclude
     private List<OrdenServicio> ordenes;
 
     public Cliente(){}

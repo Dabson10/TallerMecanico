@@ -2,9 +2,11 @@ package org.github.dabson10.tallermecanico.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoCompletoDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoOrdenesDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoSimpleDTO;
 import org.github.dabson10.tallermecanico.dto.tecnicoDTO.TecnicoUpdateDataDTO;
+import org.github.dabson10.tallermecanico.entity.Tecnico;
 import org.github.dabson10.tallermecanico.service.TecnicoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,14 @@ public class TecnicoController {
     ){
         TecnicoOrdenesDTO tecnico = teSe.obtenerTecnico(correo);
         return new ResponseEntity<>(tecnico, HttpStatus.OK);
+    }
+
+    @GetMapping("/log")
+    public ResponseEntity<TecnicoCompletoDTO> logTecnico(
+            @RequestParam(required = true, name = "correo") String correo) {
+        TecnicoCompletoDTO tec = teSe.logTecnico(correo);
+        return new ResponseEntity<>(tec, HttpStatus.OK);
+
     }
 
     @PutMapping("/update")

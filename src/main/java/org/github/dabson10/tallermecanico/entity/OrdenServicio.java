@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.github.dabson10.tallermecanico.enums.Estados;
 import org.github.dabson10.tallermecanico.exceptions.EstadoNotFoundException;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @AllArgsConstructor
+@ToString
 public class OrdenServicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +35,7 @@ public class OrdenServicio {
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
     @OneToMany(mappedBy = "ordenServicio")
+    @ToString.Exclude
     private List<DetalleOrden> detalles;
 
     public OrdenServicio(){}
